@@ -3,9 +3,13 @@
 </template>
 
 <script setup>
+import {test} from '../api/index'
 import * as Cesium from "cesium";
 import { onMounted } from "vue";
 onMounted(() => {
+  test().then(res=>{
+    console.log(res)
+  })
   Cesium.Ion.defaultAccessToken =
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJiNGNiNTMwMy1iMTM0LTRmNjMtODQ3Zi1mMDEwMTc2N2FmYTkiLCJpZCI6MTM0NTEzLCJpYXQiOjE2ODE5MTAzOTJ9.tiKWDatrDzITuelBgU6GOGvDC9i8Uw-UVWE_2kQmTD4";
   const viewer = new Cesium.Viewer("cesiumContainer");
