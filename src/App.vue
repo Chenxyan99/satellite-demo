@@ -1,13 +1,9 @@
 <template>
-  <div id="cesiumContainer"></div>
+  <Map />
 </template>
  
 <script setup>
-import * as Cesium from 'cesium';
-import { onMounted } from 'vue';
-onMounted(() => {
-  const viewer = new Cesium.Viewer('cesiumContainer');
-});
+import Map from "./components/index.vue"
 </script>
  
 <style>
@@ -15,11 +11,5 @@ onMounted(() => {
   width: 100%;
   height: 100%;
 }
-html,body,#cesiumContainer{
-  width: 100%;
-  height: 100%;
-  padding: 0;
-  margin: 0;
-  overflow: hidden;
-}
+
 </style>
