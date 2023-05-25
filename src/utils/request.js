@@ -1,8 +1,7 @@
 import axios from "axios";
 axios.defaults.headers.post["Content-Type"] = "application/json;charset=utf-8";
 axios.defaults.headers.put["Content-Type"] = "application/json;charset=utf-8";
-axios.defaults.headers.get["Content-Type"] =
-  "application/x-www-form-urlencoded;charset=utf-8";
+axios.defaults.headers.get["Content-Type"] = "application/x-www-form-urlencoded;charset=utf-8";
 
 // create an axios instance
 const service = axios.create({

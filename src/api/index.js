@@ -1,6 +1,6 @@
 import request from '../utils/request'
 
-export function test(data) {
+export function fileRead(data) {
   return request({
     url: '/CircularSat_LLA_Position.txt',
     method: 'post',

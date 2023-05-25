@@ -1,0 +1,107 @@
+<template>
+  <div id="entities">
+    <el-dropdown trigger="click">
+      <el-button type="primary">
+        显示/隐藏图层<el-icon class="el-icon--right"><arrow-down /></el-icon>
+      </el-button>
+      <template #dropdown>
+        <el-dropdown-menu>
+          <el-checkbox
+            id="checkbox"
+            v-model="checked0"
+            label="卫星"
+            @change="showSatellite(checked0)"
+          ></el-checkbox>
+          <el-checkbox
+            id="checkbox"
+            v-model="checked1"
+            label="轨迹"
+            @change="showOrbit(checked1)"
+          ></el-checkbox>
+          <el-checkbox
+            id="checkbox"
+            v-model="checked2"
+            label="任务"
+            @change="showSegments(checked2)"
+          ></el-checkbox>
+        </el-dropdown-menu>
+      </template>
+    </el-dropdown>
+  </div>
+</template>
+
+<script setup>
+import { inject, ref } from "vue";
+
+let satellite_entities = inject("satellite_entities");
+let segments_entities = inject("segments_entities");
+let checked0 = ref(true);
+let checked1 = ref(false);
+let checked2 = ref(true);
+
+function showSatellite(check) {
+  console.log(satellite_entities);
+  satellite_entities.forEach((element) => {
+    if (check) {
+      element.model.show = true;
+    } else {
+      element.model.show = false;
+    }
+  });
+}
+
+function showOrbit(check) {
+  satellite_entities.forEach((element) => {
+    if (check) {
+      element.path.show = true;
+    } else {
+      element.path.show = false;
+    }
+  });
+}
+
+function showSegments(check) {
+  segments_entities.forEach((segments) => {
+    segments.forEach((segment) => {
+      if (check) {
+        segment.polyline.show = true;
+        segment.label.show = true;
+      } else {
+        segment.polyline.show = false;
+        segment.label.show = false;
+      }
+    });
+  });
+}
+</script>
+
+<style>
+#entities {
+  top: 50px;
+  left: 50px;
+  position: absolute;
+  opacity: 0.8;
+}
+
+#checkbox {
+  margin-left: 8px;
+  margin-top: 10px;
+}
+
+.el-dropdown {
+  vertical-align: top;
+}
+
+.el-dropdown + .el-dropdown {
+  margin-left: 15px;
+}
+
+.el-icon--right {
+  font-size: 12px;
+}
+
+.el-dropdown-menu {
+  background-color: rgb(238, 238, 238, 0.8);
+  width: 130px;
+}
+</style>
