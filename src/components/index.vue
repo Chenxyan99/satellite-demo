@@ -10,6 +10,7 @@
 import { fileRead } from "../api/index";
 import { drawSatellite } from "../utils/satellite.js";
 import { createSegments } from "../utils/segments.js";
+import { drawCone } from "../utils/cone.js";
 import * as Cesium from "cesium";
 import { onMounted, reactive, ref } from "vue";
 import showLayers from "./showLayers.vue";
@@ -70,6 +71,8 @@ function init() {
 
   //开启地面深度检测，这样地下的就看不到了
   viewer.scene.globe.depthTestAgainstTerrain = true;
+  // 时间速率，数字越大时间过的越快
+  viewer.clock.multiplier = 10;
 }
 
 // 数据获取
@@ -107,6 +110,8 @@ onMounted(() => {
     // 卫星绘制
     let satelliteEntity = drawSatellite(Cesium, viewer, positions);
     satellite_entities.push(satelliteEntity);
+    // 圆锥绘制
+    drawCone(Cesium, viewer, positions, satelliteEntity);
     // 任务绘制（模拟数据）
     let segment = [];
     for (let i = 0; i <= positions.length; i++) {
