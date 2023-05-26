@@ -2,7 +2,7 @@
   <div id="entities">
     <el-dropdown trigger="click">
       <el-button type="primary">
-        显示/隐藏图层<el-icon class="el-icon--right"><arrow-down /></el-icon>
+        显示/隐藏图层<el-icon class="ArrowDown"><ArrowDown /></el-icon>
       </el-button>
       <template #dropdown>
         <el-dropdown-menu>
@@ -31,16 +31,20 @@
 </template>
 
 <script setup>
-import { inject, ref } from "vue";
+import { reactive, ref } from "vue";
+const props = defineProps({
+  satellite_entities: Array,
+  segments_entities: Array,
+});
+let satellite_entities = reactive(props.satellite_entities);
+let segments_entities = reactive(props.segments_entities);
 
-let satellite_entities = inject("satellite_entities");
-let segments_entities = inject("segments_entities");
 let checked0 = ref(true);
 let checked1 = ref(false);
 let checked2 = ref(true);
 
+// 卫星
 function showSatellite(check) {
-  console.log(satellite_entities);
   satellite_entities.forEach((element) => {
     if (check) {
       element.model.show = true;
@@ -50,6 +54,7 @@ function showSatellite(check) {
   });
 }
 
+// 轨道
 function showOrbit(check) {
   satellite_entities.forEach((element) => {
     if (check) {
@@ -60,6 +65,7 @@ function showOrbit(check) {
   });
 }
 
+// 任务
 function showSegments(check) {
   segments_entities.forEach((segments) => {
     segments.forEach((segment) => {
@@ -94,10 +100,6 @@ function showSegments(check) {
 
 .el-dropdown + .el-dropdown {
   margin-left: 15px;
-}
-
-.el-icon--right {
-  font-size: 12px;
 }
 
 .el-dropdown-menu {

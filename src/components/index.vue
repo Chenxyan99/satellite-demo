@@ -1,6 +1,9 @@
 <template>
   <div id="cesiumContainer"></div>
-  <showLayers></showLayers>
+  <showLayers
+    :satellite_entities="satellite_entities"
+    :segments_entities="segments_entities"
+  ></showLayers>
 </template>
 
 <script setup>
@@ -8,8 +11,8 @@ import { fileRead } from "../api/index";
 import { drawSatellite } from "../utils/satellite.js";
 import { createSegments } from "../utils/segments.js";
 import * as Cesium from "cesium";
-import { onMounted, provide, reactive, ref } from "vue";
-import showLayers from './showLayers.vue';
+import { onMounted, reactive, ref } from "vue";
+import showLayers from "./showLayers.vue";
 
 let viewer = ref();
 let positions = reactive([]);
@@ -104,7 +107,6 @@ onMounted(() => {
     // 卫星绘制
     let satelliteEntity = drawSatellite(Cesium, viewer, positions);
     satellite_entities.push(satelliteEntity);
-    provide('satellite_entities',satellite_entities);
     // 任务绘制（模拟数据）
     let segment = [];
     for (let i = 0; i <= positions.length; i++) {
@@ -117,7 +119,6 @@ onMounted(() => {
       }
     }
     segments_entities.push(createSegments(Cesium, viewer, segments));
-    provide('segments_entities',segments_entities);
   }, 1000);
 });
 </script>
