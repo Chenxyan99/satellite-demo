@@ -13,6 +13,7 @@
               label="卫星"
               @change="showSatellite(checked0)"
             ></el-checkbox>
+            <el-button :icon="Setting" circle></el-button>
           </el-dropdown-item>
           <el-dropdown-item>
             <el-checkbox
@@ -54,6 +55,7 @@
 
 <script setup>
 import { reactive, ref } from "vue";
+import { Setting } from "@element-plus/icons-vue";
 const props = defineProps({
   satellite_entities: Array,
   segments_entities: Array,

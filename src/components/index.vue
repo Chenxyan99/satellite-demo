@@ -77,7 +77,7 @@ function init() {
   //开启地面深度检测，这样地下的就看不到了
   viewer.scene.globe.depthTestAgainstTerrain = true;
   // 时间速率，数字越大时间过的越快
-  viewer.clock.multiplier = 10;
+  viewer.clock.multiplier = 1;
 }
 
 // 数据获取
