@@ -1,29 +1,36 @@
 <template>
   <div id="entities">
-    <el-dropdown trigger="click">
+    <el-dropdown trigger="click" :hide-on-click="false" >
       <el-button type="primary">
         显示/隐藏图层<el-icon class="ArrowDown"><ArrowDown /></el-icon>
       </el-button>
       <template #dropdown>
-        <el-dropdown-menu>
-          <el-checkbox
+        <el-dropdown-menu >
+          <el-dropdown-item>
+             <el-checkbox
             id="checkbox"
             v-model="checked0"
             label="卫星"
             @change="showSatellite(checked0)"
           ></el-checkbox>
-          <el-checkbox
+          </el-dropdown-item>
+         <el-dropdown-item>
+           <el-checkbox
             id="checkbox"
             v-model="checked1"
             label="轨迹"
             @change="showOrbit(checked1)"
           ></el-checkbox>
+         </el-dropdown-item>
+         <el-dropdown-item>
           <el-checkbox
             id="checkbox"
             v-model="checked2"
             label="任务"
             @change="showSegments(checked2)"
           ></el-checkbox>
+         </el-dropdown-item>
+          
         </el-dropdown-menu>
       </template>
     </el-dropdown>
