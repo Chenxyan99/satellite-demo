@@ -56,12 +56,14 @@
 <script setup>
 import { reactive, ref } from "vue";
 import { Setting } from "@element-plus/icons-vue";
+
 const props = defineProps({
   satellite_entities: Array,
   segments_entities: Array,
   entity_yz: Object,
   entity_yz_arr: Array,
 });
+
 let satellite_entities = reactive(props.satellite_entities);
 let segments_entities = reactive(props.segments_entities);
 let entity_yz = reactive(props.entity_yz);
