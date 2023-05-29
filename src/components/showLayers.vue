@@ -2,7 +2,7 @@
   <div id="entities">
     <el-dropdown trigger="click" :hide-on-click="false" >
       <el-button type="primary">
-        显示/隐藏图层<el-icon class="ArrowDown"><ArrowDown /></el-icon>
+        显示/隐藏图层<el-icon><ArrowDown /></el-icon>
       </el-button>
       <template #dropdown>
         <el-dropdown-menu >
