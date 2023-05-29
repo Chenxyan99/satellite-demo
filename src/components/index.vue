@@ -3,6 +3,9 @@
   <showLayers
     :satellite_entities="satellite_entities"
     :segments_entities="segments_entities"
+    :entity_yz="entity_yz"
+    :entity_yz_arr="entity_yz_arr"
+    v-if="segments_entities.length != 0"
   ></showLayers>
 </template>
 
@@ -19,6 +22,8 @@ let viewer = ref();
 let positions = reactive([]);
 let satellite_entities = reactive([]);
 let segments_entities = reactive([]);
+let entity_yz = ref();
+let entity_yz_arr = reactive([]);
 let segments = reactive([]);
 
 // 初始化地图
@@ -111,7 +116,9 @@ onMounted(() => {
     let satelliteEntity = drawSatellite(Cesium, viewer, positions);
     satellite_entities.push(satelliteEntity);
     // 圆锥绘制
-    drawCone(Cesium, viewer, positions, satelliteEntity);
+    let coneData = drawCone(Cesium, viewer, positions, satelliteEntity);
+    entity_yz = coneData.entity_yz;
+    entity_yz_arr = coneData.entity_yz_arr;
     // 任务绘制（模拟数据）
     let segment = [];
     for (let i = 0; i <= positions.length; i++) {

@@ -48,7 +48,6 @@ export function drawCone(Cesium, viewer, positions, wx_positions) {
 
   //圆锥数组
   var entity_yz_arr = new Array();
-  var flag = true; //用于表示定时生成的圆锥是否显示
   //实时更新卫星和圆锥的角度
   setInterval(function () {
     //获取卫星和圆锥当前的位置
@@ -94,7 +93,7 @@ export function drawCone(Cesium, viewer, positions, wx_positions) {
       );
 
       var entity_tmp = viewer.entities.add({
-        show: flag,
+        show: window.config.flag,
         position: yz_position,
         orientation: orientation2,
         cylinder: {
@@ -110,5 +109,6 @@ export function drawCone(Cesium, viewer, positions, wx_positions) {
       });
       entity_yz_arr.push(entity_tmp);
     }
-  }, 251);
+  }, 1000);
+  return { entity_yz: entity_yz, entity_yz_arr: entity_yz_arr };
 }
