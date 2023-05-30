@@ -5,8 +5,9 @@
     :segments_entities="segments_entities"
     :entity_yz="entity_yz"
     :entity_yz_arr="entity_yz_arr"
+    v-if="segments_entities.length != 0"
   ></showLayers>
-  <!-- v-if="segments_entities.length != 0" -->
+  <mapSwitch :viewer="viewer" v-if="segments_entities.length != 0"> </mapSwitch>
 </template>
 
 <script setup>
@@ -17,6 +18,7 @@ import { drawCone } from "../utils/cone.js";
 import * as Cesium from "cesium";
 import { onMounted, reactive, ref } from "vue";
 import showLayers from "./showLayers.vue";
+import mapSwitch from "./mapSwitch.vue";
 
 let viewer = ref();
 let satellites = reactive([]);
@@ -89,7 +91,10 @@ function showDetails() {
     segments_entities.forEach((segment_entities) => {
       for (let i = 0; i < segment_entities.length; i++) {
         let segment = segment_entities[i];
-        if (Cesium.defined(pickedObject) && pickedObject.id.name === segment.name) {
+        if (
+          Cesium.defined(pickedObject) &&
+          pickedObject.id.name === segment.name
+        ) {
           // 当前 Polyline 被选中，将其高亮显示，并显示详情infobox
           segment.polyline.material.outlineWidth = 2;
           segment.polyline.material.outlineColor = Cesium.Color.RED;
