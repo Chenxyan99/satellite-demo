@@ -5,8 +5,8 @@
     :segments_entities="segments_entities"
     :entity_yz="entity_yz"
     :entity_yz_arr="entity_yz_arr"
-    v-if="segments_entities.length != 0"
   ></showLayers>
+  <!-- v-if="segments_entities.length != 0" -->
 </template>
 
 <script setup>
@@ -19,12 +19,11 @@ import { onMounted, reactive, ref } from "vue";
 import showLayers from "./showLayers.vue";
 
 let viewer = ref();
-let positions = reactive([]);
+let satellites = reactive([]);
 let satellite_entities = reactive([]);
 let segments_entities = reactive([]);
 let entity_yz = ref();
 let entity_yz_arr = reactive([]);
-let segments = reactive([]);
 
 // 初始化地图
 function init() {
@@ -80,6 +79,37 @@ function init() {
   viewer.clock.multiplier = 1;
 }
 
+// 任务详情显示
+function showDetails() {
+  // 任务详情显示
+  viewer.screenSpaceEventHandler.setInputAction(function onMouseClick(
+    movement
+  ) {
+    let pickedObject = viewer.scene.pick(movement.position);
+    segments_entities.forEach((segment_entities) => {
+      for (let i = 0; i < segment_entities.length; i++) {
+        let segment = segment_entities[i];
+        if (Cesium.defined(pickedObject) && pickedObject.id.name === segment.name) {
+          // 当前 Polyline 被选中，将其高亮显示，并显示详情infobox
+          segment.polyline.material.outlineWidth = 2;
+          segment.polyline.material.outlineColor = Cesium.Color.RED;
+
+          viewer.selectedEntity = segment;
+        } else {
+          // 当前 Polyline 已经被选中，恢复到默认状态
+          segment.polyline.material.outlineWidth = 0;
+          segment.polyline.material.outlineColor = null;
+        }
+      }
+      // 选中未定义目标不显示infobox
+      if (!Cesium.defined(pickedObject)) {
+        viewer.selectedEntity = null;
+      }
+    });
+  },
+  Cesium.ScreenSpaceEventType.LEFT_CLICK);
+}
+
 // 数据获取
 function getData() {
   fileRead().then((res) => {
@@ -90,15 +120,26 @@ function getData() {
         let fileContent = e.target.result;
         fileContent = String(fileContent);
         let lines = fileContent.split("\n");
+        let positions = new Array();
         for (let i = 4; i < lines.length; i++) {
           let line = lines[i];
+          // 时间匹配
+          let dateMatch = line.match(
+            /(\d{2}\s\w+\s\d{4}\s\d{2}:\d{2}:\d{2}\.\d{3})/g
+          );
+          // let dateString = dateMatch[1];
+          // console.log(dateMatch);
+          // 经纬度、海拔匹配
           let numbers = line.match(/-?\d+\.\d+/g);
+          // console.log(numbers);
           if (numbers !== null) {
             let lat = parseFloat(numbers[1]);
             let lon = parseFloat(numbers[2]);
             let alt = parseFloat(numbers[3]);
-            // console.log(lon + " " + lat + " " + alt);
             positions.push({ lon: lon, lat: lat, alt: alt });
+          } else {
+            if (positions.length != 0) satellites.push(positions);
+            positions = [];
           }
         }
       }
@@ -112,25 +153,31 @@ onMounted(() => {
   // txt测试数据读取
   getData();
   setTimeout(function () {
-    // 卫星绘制
-    let satelliteEntity = drawSatellite(Cesium, viewer, positions);
-    satellite_entities.push(satelliteEntity);
-    // 圆锥绘制
-    let coneData = drawCone(Cesium, viewer, positions, satelliteEntity);
-    entity_yz = coneData.entity_yz;
-    entity_yz_arr = coneData.entity_yz_arr;
-    // 任务绘制（模拟数据）
-    let segment = [];
-    for (let i = 0; i <= positions.length; i++) {
-      segment.push(positions[i]);
-      if (i == 50 || i == 150 || i == 300) {
-        segments.push(segment);
-        segment = [];
+    let index = 0;
+    satellites.forEach((positions) => {
+      // 卫星绘制'
+      let satelliteEntity = drawSatellite(Cesium, viewer, positions);
+      satellite_entities.push(satelliteEntity);
+      // 圆锥绘制
+      // let coneData = drawCone(Cesium, viewer, positions, satelliteEntity);
+      // entity_yz = coneData.entity_yz;
+      // entity_yz_arr = coneData.entity_yz_arr;
+      // 任务绘制（模拟数据）
+      let segment = [];
+      let segments = [];
+      for (let i = 0; i <= positions.length; i++) {
         segment.push(positions[i]);
-        if (i == 300) break;
+        if (i == 50 || i == 150 || i == 300) {
+          segments.push(segment);
+          segment = [];
+          segment.push(positions[i]);
+          if (i == 300) break;
+        }
       }
-    }
-    segments_entities.push(createSegments(Cesium, viewer, segments));
+      segments_entities.push(createSegments(Cesium, viewer, segments, index));
+      index = index + 1;
+      showDetails();
+    });
   }, 1000);
 });
 </script>

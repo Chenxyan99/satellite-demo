@@ -1,4 +1,4 @@
-export function createSegments(Cesium, viewer, segments) {
+export function createSegments(Cesium, viewer, segments, index) {
   // 六色选择
   const colors = [
     Cesium.Color.ORANGE,
@@ -8,7 +8,7 @@ export function createSegments(Cesium, viewer, segments) {
     Cesium.Color.GREEN,
     Cesium.Color.PURPLE,
   ];
-  let segments_entities = [];
+  let segment_entities = [];
   for (let i = 0; i < segments.length; i++) {
     let positions = [];
     segments[i].forEach((position) => {
@@ -23,7 +23,7 @@ export function createSegments(Cesium, viewer, segments) {
 
     // 创建任务线
     let polyline = viewer.entities.add({
-      name: "卫星0-任务" + i,
+      name: "卫星" + index + "-任务" + i,
       description: "<p>" + "任务" + i + "</p>",
       polyline: {
         positions: positions,
@@ -38,7 +38,7 @@ export function createSegments(Cesium, viewer, segments) {
       // 标签
       position: positions[0],
       label: {
-        text: "卫星0-任务" + i,
+        text: "卫星" + index + "-任务" + i,
         font: "14px sans-serif",
         showBackground: true,
         style: Cesium.LabelStyle.FILL,
@@ -53,34 +53,8 @@ export function createSegments(Cesium, viewer, segments) {
         ),
       },
     });
-    segments_entities.push(polyline);
+    segment_entities.push(polyline);
   }
 
-  // 任务详情显示
-  viewer.screenSpaceEventHandler.setInputAction(function onMouseClick(
-    movement
-  ) {
-    let pickedObject = viewer.scene.pick(movement.position);
-
-    for (let i = 0; i < segments_entities.length; i++) {
-      let segment = segments_entities[i];
-      if (Cesium.defined(pickedObject) && pickedObject.id === segment) {
-        // 当前 Polyline 被选中，将其高亮显示，并显示详情infobox
-        segment.polyline.material.outlineWidth = 2;
-        segment.polyline.material.outlineColor = Cesium.Color.RED;
-
-        viewer.selectedEntity = segment;
-      } else {
-        // 当前 Polyline 已经被选中，恢复到默认状态
-        segment.polyline.material.outlineWidth = 0;
-        segment.polyline.material.outlineColor = null;
-      }
-    }
-    // 选中未定义目标不显示infobox
-    if (!Cesium.defined(pickedObject)) {
-      viewer.selectedEntity = null;
-    }
-  },
-  Cesium.ScreenSpaceEventType.LEFT_CLICK);
-  return segments_entities;
+  return segment_entities;
 }
