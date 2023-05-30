@@ -53,6 +53,7 @@ const nightLayer = viewer.imageryLayers.addImageryProvider(
     subdomains: ["a", "b", "c", "d"],
   })
 );
+
 //默认正常模式
 dayLayer.show = false;
 nightLayer.show = false;
