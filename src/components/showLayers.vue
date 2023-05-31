@@ -2,50 +2,30 @@
   <div id="entities">
     <el-dropdown trigger="click" :hide-on-click="false">
       <el-button type="primary">
-        显示/隐藏图层<el-icon><ArrowDown /></el-icon>
+        显示/隐藏图层<el-icon>
+          <ArrowDown />
+        </el-icon>
       </el-button>
       <template #dropdown>
         <el-dropdown-menu>
           <el-dropdown-item>
-            <el-checkbox
-              id="checkbox"
-              v-model="checked0"
-              label="卫星"
-              @change="showSatellite(checked0)"
-            ></el-checkbox>
+            <el-checkbox id="checkbox" v-model="checked0" label="卫星" @change="showSatellite(checked0)"></el-checkbox>
             <el-button :icon="Setting" circle></el-button>
           </el-dropdown-item>
           <el-dropdown-item>
-            <el-checkbox
-              id="checkbox"
-              v-model="checked1"
-              label="轨迹"
-              @change="showOrbit(checked1)"
-            ></el-checkbox>
+            <el-checkbox id="checkbox" v-model="checked1" label="轨迹" @change="showOrbit(checked1)"></el-checkbox>
           </el-dropdown-item>
           <el-dropdown-item>
-            <el-checkbox
-              id="checkbox"
-              v-model="checked2"
-              label="任务"
-              @change="showSegments(checked2)"
-            ></el-checkbox>
+            <el-checkbox id="checkbox" v-model="checked2" label="任务" @change="showSegments(checked2)"></el-checkbox>
           </el-dropdown-item>
           <el-dropdown-item>
-            <el-checkbox
-              id="checkbox"
-              v-model="checked3"
-              label="历史波束"
-              @change="showHistoryBeam(checked3)"
-            ></el-checkbox>
+            <el-checkbox id="checkbox" v-model="checked3" label="历史波束" @change="showHistoryBeam(checked3)"></el-checkbox>
           </el-dropdown-item>
           <el-dropdown-item>
-            <el-checkbox
-              id="checkbox"
-              v-model="checked4"
-              label="实时波束"
-              @change="showBeam(checked4)"
-            ></el-checkbox>
+            <el-checkbox id="checkbox" v-model="checked4" label="实时波束" @change="showBeam(checked4)"></el-checkbox>
+          </el-dropdown-item>
+          <el-dropdown-item>
+            <el-checkbox id="checkbox" v-model="checked5" label="星座网格" @change="showDashLine(checked5)"></el-checkbox>
           </el-dropdown-item>
         </el-dropdown-menu>
       </template>
@@ -62,18 +42,21 @@ const props = defineProps({
   segments_entities: Array,
   entity_yz: Object,
   entity_yz_arr: Array,
+  dashLine_entities: Array,
 });
 
 let satellite_entities = reactive(props.satellite_entities);
 let segments_entities = reactive(props.segments_entities);
 let entity_yz = reactive(props.entity_yz);
 let entity_yz_arr = reactive(props.entity_yz_arr);
+let dashLine_entities = reactive(props.dashLine_entities);
 
 let checked0 = ref(true);
 let checked1 = ref(false);
 let checked2 = ref(true);
 let checked3 = ref(true);
 let checked4 = ref(true);
+let checked5 = ref(true);
 
 // 卫星
 function showSatellite(check) {
@@ -134,6 +117,18 @@ function showBeam(check) {
     entity_yz.show = false;
   }
 }
+
+//星座网格
+function showDashLine(check) {
+  dashLine_entities.forEach((element) => {
+    if (check) {
+      element.show = true;
+    } else {
+      element.show = false;
+    }
+  });
+}
+
 </script>
 
 <style>
@@ -153,7 +148,7 @@ function showBeam(check) {
   vertical-align: top;
 }
 
-.el-dropdown + .el-dropdown {
+.el-dropdown+.el-dropdown {
   margin-left: 15px;
 }
 

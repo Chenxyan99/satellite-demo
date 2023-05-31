@@ -1,6 +1,6 @@
 export function drawSatellite(Cesium, viewer, positions) {
   var positionProperty = new Cesium.SampledPositionProperty();
-  var TimeInterval = 60;
+  var TimeInterval = 0.8;
   for (var i = 0; i < positions.length; i++) {
     var time = Cesium.JulianDate.addSeconds(
       viewer.clock.currentTime,
