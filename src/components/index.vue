@@ -118,6 +118,8 @@ function showDetails() {
 // 数据获取
 function getData() {
   fileRead().then((res) => {
+
+    
     let reader = new FileReader();
     reader.readAsText(new Blob([res]));
     reader.onload = function (e) {
