@@ -1,12 +1,8 @@
 <template>
   <div id="cesiumContainer"></div>
-  <showLayers
-    :satellite_entities="satellite_entities"
-    :segments_entities="segments_entities"
-    :entity_yz="entity_yz"
-    :entity_yz_arr="entity_yz_arr"
-    v-if="segments_entities.length != 0"
-  ></showLayers>
+  <showLayers :satellite_entities="satellite_entities" :segments_entities="segments_entities" :entity_yz="entity_yz"
+    :entity_yz_arr="entity_yz_arr" :dashLine_entities="dashLine_entities" v-if="segments_entities.length != 0">
+  </showLayers>
   <mapSwitch :viewer="viewer" v-if="segments_entities.length != 0"> </mapSwitch>
 </template>
 
@@ -15,6 +11,7 @@ import { fileRead } from "../api/index";
 import { drawSatellite } from "../utils/satellite.js";
 import { createSegments } from "../utils/segments.js";
 import { drawCone } from "../utils/cone.js";
+import { createDashLine } from "../utils/dashLine.js"
 import * as Cesium from "cesium";
 import { onMounted, reactive, ref } from "vue";
 import showLayers from "./showLayers.vue";
@@ -26,6 +23,7 @@ let satellite_entities = reactive([]);
 let segments_entities = reactive([]);
 let entity_yz = ref();
 let entity_yz_arr = reactive([]);
+let dashLine_entities = reactive([]);
 
 // 初始化地图
 function init() {
@@ -112,7 +110,7 @@ function showDetails() {
       }
     });
   },
-  Cesium.ScreenSpaceEventType.LEFT_CLICK);
+    Cesium.ScreenSpaceEventType.LEFT_CLICK);
 }
 
 // 数据获取
@@ -165,10 +163,12 @@ onMounted(() => {
       // 卫星绘制'
       let satelliteEntity = drawSatellite(Cesium, viewer, positions);
       satellite_entities.push(satelliteEntity);
+
       // 圆锥绘制
       // let coneData = drawCone(Cesium, viewer, positions, satelliteEntity);
       // entity_yz = coneData.entity_yz;
       // entity_yz_arr = coneData.entity_yz_arr;
+
       // 任务绘制（模拟数据）
       let segment = [];
       let segments = [];
@@ -185,6 +185,12 @@ onMounted(() => {
       index = index + 1;
       showDetails();
     });
+
+    //星座网格绘制
+    let dashLine1 = createDashLine(Cesium, viewer, satellite_entities[0].position, satellite_entities[1].position);
+    let dashLine2 = createDashLine(Cesium, viewer, satellite_entities[2].position, satellite_entities[3].position);
+    dashLine_entities.push(dashLine1);
+    dashLine_entities.push(dashLine2);
   }, 1000);
 });
 </script>
