@@ -161,4 +161,7 @@ function showBeam(check) {
   background-color: rgb(238, 238, 238, 0.8);
   width: 130px;
 }
+.el-dropdown-menu__item i {
+  margin: 0;
+}
 </style>

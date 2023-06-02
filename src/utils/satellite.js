@@ -42,10 +42,10 @@ export function drawSatellite(Cesium, viewer, positions) {
   });
 
   // 插值器
-  satelliteEntity.position.setInterpolationOptions({
-    interpolationDegree: 5,
-    interpolationAlgorithm: Cesium.LagrangePolynomialApproximation,
-  });
+  // satelliteEntity.position.setInterpolationOptions({
+  //   interpolationDegree: 5,
+  //   interpolationAlgorithm: Cesium.LagrangePolynomialApproximation,
+  // });
 
   // 将卫星实体添加到Cesium的Viewer中显示
   viewer.entities.add(satelliteEntity);
