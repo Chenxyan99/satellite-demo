@@ -141,8 +141,10 @@ function getData() {
           let dateMatch = line.match(
             /(\d{2}\s\w+\s\d{4}\s\d{2}:\d{2}:\d{2}\.\d{3})/g
           );
-          // let dateString = dateMatch[1];
-          // console.log(dateMatch);
+          if (dateMatch) {
+            let dateString = dateMatch[0];
+            console.log(dateString);
+          }
           // 经纬度、海拔匹配
           let numbers = line.match(/-?\d+\.\d+/g);
           // console.log(numbers);
