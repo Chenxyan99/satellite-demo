@@ -4,6 +4,16 @@
     :entity_yz_arr="entity_yz_arr" :dashLine_entities="dashLine_entities" v-if="segments_entities.length != 0">
   </showLayers>
   <mapSwitch :viewer="viewer" v-if="segments_entities.length != 0"> </mapSwitch>
+   <el-dialog
+      title="提示"
+      width="30%"
+      draggable="true"
+      :close-on-click-modal='false'
+      v-model="dialogVisible"
+      style="pointer-events:auto"
+      >
+      <span>这是一段信息</span>
+    </el-dialog>
 </template>
 
 <script setup>
@@ -24,9 +34,10 @@ let segments_entities = reactive([]);
 let entity_yz = ref();
 let entity_yz_arr = reactive([]);
 let dashLine_entities = reactive([]);
-
+let dialogVisible= ref()
 // 初始化地图
 function init() {
+  dialogVisible.value=true
   Cesium.Ion.defaultAccessToken =
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJiNGNiNTMwMy1iMTM0LTRmNjMtODQ3Zi1mMDEwMTc2N2FmYTkiLCJpZCI6MTM0NTEzLCJpYXQiOjE2ODE5MTAzOTJ9.tiKWDatrDzITuelBgU6GOGvDC9i8Uw-UVWE_2kQmTD4";
   viewer = new Cesium.Viewer("cesiumContainer", {
